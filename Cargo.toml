@@ -1,8 +1,12 @@
 [package]
 name = "transformers-wasm"
 version = "0.1.0"
-authors = ["Jan Schulte <77549848+sigma-andex@users.noreply.github.com>"]
+authors = ["Jan Schulte <jan.schulte@betalyra.pt>"]
 edition = "2018"
+license = "MIT"
+description = "Wasm implementation of transformers based on Huggingface Candle"
+keywords = ["llm","wasm","transformers"]
+repository = "https://github.com/text-yoga/transformers-wasm"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
