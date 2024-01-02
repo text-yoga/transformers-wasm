@@ -18,6 +18,15 @@ wasm-bindgen = "0.2.84"
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.7", optional = true }
+candle = { version = "0.3.2", package = "candle-core"}
+candle-nn = "0.3.2"
+candle-transformers = "0.3.2"
+tracing-wasm = "0.2.1"
+web-time = "0.2.4"
+web-sys = "0.3.66"
+tokenizers = { version = "0.15.0", features = ["unstable_wasm"], default-features = false }
+serde = {version = "1.0.193", features = ["derive"]}
+serde_json = "1.0.108"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.34"
