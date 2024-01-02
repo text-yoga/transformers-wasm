@@ -189,5 +189,3 @@ fn format_size(size_in_bytes: usize) -> String {
         format!("{:.2}GB", size_in_bytes as f64 / 1e9)
     }
 }
-
-fn main() {}

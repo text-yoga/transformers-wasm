@@ -1,0 +1,16 @@
+{
+  "name": "@text-yoga/transformers-wasm",
+  "version": "1.0.0",
+  "description": "⚠️ **WARNING**: This is very early stage, use at your own risk ⚠️",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build:release": "wasm-pack build -s text-yoga --release",
+    "test": "wasm-pack test --chrome --chromedriver \"$(which chromedriver)\" --headless"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

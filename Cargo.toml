@@ -30,18 +30,6 @@ js-sys = "0.3.64"
 
 [dependencies.web-sys]
 features = [
-  'Blob',
-  'Document',
-  'Element',
-  'HtmlElement',
-  'Node',
-  'Window',
-  'Request',
-  'RequestCache',
-  'RequestInit',
-  'RequestMode',
-  'Response',
-  'Performance',
   'console'
 ]
 version = "0.3.64"
@@ -51,4 +39,5 @@ wasm-bindgen-test = "0.3.34"
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.
-opt-level = "s"
+opt-level = "z"
+lto = true
