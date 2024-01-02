@@ -2,7 +2,7 @@
 
 ⚠️ **WARNING**: This is very early stage, use at your own risk ⚠️
 
-Wasm transformers. 
+Wasm transformers. Based on [`candle`](https://github.com/huggingface/candle).
 
 ## Developing
 
