@@ -2,16 +2,6 @@ mod quantized_mistral;
 mod utils;
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
-
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, transformers-wasm!");
-}
-
 #[wasm_bindgen(start)]
 pub fn start() -> Result<(), JsValue> {
     // print pretty errors in wasm https://github.com/rustwasm/console_error_panic_hook
