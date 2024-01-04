@@ -13,13 +13,12 @@ use web_sys::{Request, RequestInit, RequestMode, Response};
 
 wasm_bindgen_test_configure!(run_in_browser);
 
-#[wasm_bindgen_test]
-async fn pass() -> Result<(), JsValue> {
+async fn load_json(url: &str) -> Result<JsValue, JsValue> {
     let mut opts = RequestInit::new();
     opts.method("GET");
     opts.mode(RequestMode::Cors);
 
-    let url = "http://localhost:45678/test.json";
+    // let url = "http://localhost:45678/tokenizer.json";
 
     let request = Request::new_with_str_and_init(&url, &opts)?;
 
@@ -32,6 +31,14 @@ async fn pass() -> Result<(), JsValue> {
 
     // Convert this other `Promise` into a rust `Future`.
     let json = JsFuture::from(resp.json()?).await?;
+
+    Ok(json)
+}
+#[wasm_bindgen_test]
+async fn pass() -> Result<(), JsValue> {
+    let url = "http://localhost:45678/tokenizer.json";
+
+    let json = load_json(&url).await?;
 
     let json_str = js_sys::JSON::stringify(&json)?;
 
