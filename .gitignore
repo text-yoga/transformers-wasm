@@ -16,3 +16,5 @@ Cargo.lock
 bin/
 pkg/
 wasm-pack.log
+tests/data/
+node_modules/
