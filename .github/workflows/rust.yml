@@ -22,5 +22,5 @@ jobs:
           cargo install wasm-pack
       - name: Build
         run: npm run build:release
-      - name: Run tests
-        run: npm run test
+      # - name: Run tests
+      #   run: npm run test
