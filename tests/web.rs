@@ -21,14 +21,11 @@ async fn fetch(url: &str) -> Result<Response, JsValue> {
     opts.method("GET");
     opts.mode(RequestMode::Cors);
 
-    // let url = "http://localhost:45678/tokenizer.json";
-
     let request = Request::new_with_str_and_init(&url, &opts)?;
 
     let window = web_sys::window().unwrap();
     let resp_value = JsFuture::from(window.fetch_with_request(&request)).await?;
 
-    // `resp_value` is a `Response` object.
     assert!(resp_value.is_instance_of::<Response>());
     let resp: Response = resp_value.dyn_into().unwrap();
 
@@ -38,7 +35,6 @@ async fn fetch(url: &str) -> Result<Response, JsValue> {
 async fn load_json(url: &str) -> Result<JsValue, JsValue> {
     let response = fetch(url).await?;
     let json = JsFuture::from(response.json()?).await?;
-
     Ok(json)
 }
 
