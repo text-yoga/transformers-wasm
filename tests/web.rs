@@ -19,13 +19,9 @@ async fn pass() -> Result<(), JsValue> {
     opts.method("GET");
     opts.mode(RequestMode::Cors);
 
-    let url = "https://api.github.com/repos/text-yoga/transformers-wasm/branches/main";
+    let url = "http://localhost:45678/test.json";
 
     let request = Request::new_with_str_and_init(&url, &opts)?;
-
-    request
-        .headers()
-        .set("Accept", "application/vnd.github.v3+json")?;
 
     let window = web_sys::window().unwrap();
     let resp_value = JsFuture::from(window.fetch_with_request(&request)).await?;

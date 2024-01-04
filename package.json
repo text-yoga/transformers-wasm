@@ -9,9 +9,13 @@
   "scripts": {
     "build": "wasm-pack build -s text-yoga --dev",
     "build:release": "wasm-pack build -s text-yoga --release",
+    "test:server": "npx http-server --cors -p 45678  ./tests/data",
     "test": "wasm-pack test --chrome --chromedriver \"$(which chromedriver)\" --headless"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
 }
