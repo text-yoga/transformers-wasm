@@ -11,6 +11,7 @@ use tokenizers::Tokenizer;
 use wasm_bindgen::prelude::*;
 use web_time as time;
 
+use gloo::console::log;
 use web_sys::console;
 
 #[wasm_bindgen]
@@ -26,7 +27,7 @@ impl Model {
     fn process(&mut self, tokens: &[u32]) -> candle::Result<String> {
         let u32_array = Uint32Array::new_with_length(tokens.len() as u32);
         u32_array.copy_from(tokens);
-        console::log_2(&"Processing tokens".into(), &u32_array.into());
+        log!("Processing tokens", u32_array);
 
         const REPEAT_LAST_N: usize = 64;
         let dev = Device::Cpu;
@@ -68,21 +69,7 @@ impl Model {
 impl Model {
     #[wasm_bindgen(constructor)]
     pub fn new(weights: Vec<u8>, tokenizer: Vec<u8>) -> Result<Model, JsError> {
-        println!("Initialising model...");
-        // let model = M::load(ModelData {
-        //     tokenizer,
-        //     model: weights,
-        // });
-        // let logits_processor = LogitsProcessor::new(299792458, None, None);
-        // match model {
-        //     Ok(inner) => Ok(Self {
-        //         inner,
-        //         logits_processor,
-        //         tokens: vec![],
-        //         repeat_penalty: 1.,
-        //     }),
-        //     Err(e) => Err(JsError::new(&e.to_string())),
-        // }
+        log!("Initialising model...");
         let seed = 299792458;
         let temperature: Option<f64> = Some(0.8);
         let top_p: Option<f64> = None;
@@ -91,19 +78,21 @@ impl Model {
         let mut cursor = Cursor::new(&weights);
         let mut cursor2 = Cursor::new(&weights);
         let model: ModelWeights = {
+            log!("Loading gguf file...");
             let model = gguf_file::Content::read(&mut cursor)?;
+            log!("gguf file loaded.");
             let mut total_size_in_bytes = 0;
             for (_, tensor) in model.tensor_infos.iter() {
                 let elem_count = tensor.shape.elem_count();
                 total_size_in_bytes +=
                     elem_count * tensor.ggml_dtype.type_size() / tensor.ggml_dtype.blck_size();
             }
-            println!(
+            log!(format!(
                 "loaded {:?} tensors ({}) in {:.2}s",
                 model.tensor_infos.len(),
-                &format_size(total_size_in_bytes),
-                start.elapsed().as_secs_f32(),
-            );
+                format_size(total_size_in_bytes),
+                start.elapsed().as_secs_f32()
+            ));
             ModelWeights::from_gguf(model, &mut cursor2)?
         };
         println!("model built");
