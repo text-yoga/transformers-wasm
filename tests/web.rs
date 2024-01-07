@@ -39,9 +39,19 @@ async fn pass() -> Result<(), JsValue> {
     let top_p: f64 = 1.;
     let repeat_penalty: f32 = 1.1;
     let seed: u64 = 203948203948;
+    let max_token = 20;
     let first_result: String = model.init_with_prompt(prompt, temp, top_p, repeat_penalty, seed)?;
 
     log!("first prompt result", &first_result);
-    assert_eq!(1 + 1, 2);
+
+    let mut result = first_result;
+    for index in 0..max_token {
+        let tok = model.next_token()?;
+        result += &tok;
+        log!(tok);
+    }
+    log!("\nComplete result:");
+    log!(result);
+    let result = assert_eq!(1 + 1, 2);
     Ok(())
 }

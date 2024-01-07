@@ -11,7 +11,7 @@ use tokenizers::Tokenizer;
 use wasm_bindgen::prelude::*;
 use web_time as time;
 
-use gloo::console::log;
+use gloo::console::{debug, log};
 use web_sys::console;
 
 #[wasm_bindgen]
@@ -84,9 +84,6 @@ impl Model {
             let mut total_size_in_bytes = 0;
             for (_, tensor) in model.tensor_infos.iter() {
                 let elem_count = tensor.shape.elem_count();
-                log!("elem_count", elem_count);
-                log!("type_size", tensor.ggml_dtype.type_size());
-                log!("blck_size", tensor.ggml_dtype.blck_size());
                 total_size_in_bytes +=
                     // Very important to keep the parenthesis here, otherwise might overflow (in test).
                     elem_count * (tensor.ggml_dtype.type_size() / tensor.ggml_dtype.blck_size());
@@ -128,11 +125,10 @@ impl Model {
         repeat_penalty: f32,
         seed: u64,
     ) -> Result<String, JsError> {
-        console::log_1(&"Initialising prompt with temperature=".into());
-        console::log_2(&"temperature=".into(), &temp.into());
-        console::log_2(&"top_p=".into(), &top_p.into());
-        console::log_2(&"repeat_penalty=".into(), &repeat_penalty.into());
-        console::log_2(&"seed=".into(), &seed.into());
+        debug!(
+            "Initialising prompt with temperature=",
+            temp, "top_p=", top_p, "repeat_penalty=", repeat_penalty, "seed=", seed
+        );
         // First reset the cache.
         // {
         //     let mut cache = self.inner.cache.kvs.lock().unwrap();
