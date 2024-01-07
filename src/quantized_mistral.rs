@@ -84,8 +84,12 @@ impl Model {
             let mut total_size_in_bytes = 0;
             for (_, tensor) in model.tensor_infos.iter() {
                 let elem_count = tensor.shape.elem_count();
+                log!("elem_count", elem_count);
+                log!("type_size", tensor.ggml_dtype.type_size());
+                log!("blck_size", tensor.ggml_dtype.blck_size());
                 total_size_in_bytes +=
-                    elem_count * tensor.ggml_dtype.type_size() / tensor.ggml_dtype.blck_size();
+                    // Very important to keep the parenthesis here, otherwise might overflow (in test).
+                    elem_count * (tensor.ggml_dtype.type_size() / tensor.ggml_dtype.blck_size());
             }
             log!(format!(
                 "loaded {:?} tensors ({}) in {:.2}s",

@@ -20,8 +20,8 @@ wasm_bindgen_test_configure!(run_in_browser);
 
 #[wasm_bindgen_test]
 async fn pass() -> Result<(), JsValue> {
-    let tokenizer_url = "http://localhost:45678/tokenizer.json";
-    let model_url = "http://localhost:45678/tinymistral-248m.q4_k_m.gguf";
+    let tokenizer_url = "http://localhost:31300/tokenizer.json";
+    let model_url = "http://localhost:31300/tinymistral-248m.q4_k_m.gguf";
 
     let tokenizer_blob: Vec<u8> = utils::load_binary(&tokenizer_url).await?;
     let tokenizer_blob_len = format!("{}", &tokenizer_blob.len());
