@@ -20,8 +20,8 @@ wasm_bindgen_test_configure!(run_in_browser);
 
 #[wasm_bindgen_test]
 async fn pass() -> Result<(), JsValue> {
-    let tokenizer_url = "http://localhost:31300/tokenizer.json";
-    let model_url = "http://localhost:31300/tinymistral-248m.q4_k_m.gguf";
+    let tokenizer_url = "http://localhost:31300/TinyLlama_TinyLlama-1.1B-Chat-v1.0/tokenizer.json";
+    let model_url = "http://localhost:31300/TheBloke_TinyLlama-1.1B-Chat-v1.0-GGUF/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf";
 
     let tokenizer_blob: Vec<u8> = utils::load_binary(&tokenizer_url).await?;
     let tokenizer_blob_len = format!("{}", &tokenizer_blob.len());
@@ -32,9 +32,16 @@ async fn pass() -> Result<(), JsValue> {
     log!("model blob size", &model_blob_len);
 
     log!("loading model...");
+
     let mut model = Model::new(model_blob, tokenizer_blob)?;
     log!("model loaded.");
-    let prompt: String = String::from("What is a good recipe for onion soup");
+    let prompt: String = String::from(
+        "<|system|>
+        You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature. If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information. </s>
+    <|user|>
+    What is borrow checking in rust?</s>
+    <|assistant|>",
+    );
     let temp: f64 = 0.8;
     let top_p: f64 = 1.;
     let repeat_penalty: f32 = 1.1;

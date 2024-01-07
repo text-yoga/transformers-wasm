@@ -10,8 +10,8 @@
     "build": "wasm-pack build -s text-yoga --dev",
     "build:release": "wasm-pack build -s text-yoga --release",
     "test:server": "npx http-server --cors -p 31300  ./tests/data",
-    "test:chrome": "RUST_LOG=wasm_bindgen_test_runner wasm-pack -vvv test --chrome --chromedriver \"$(which chromedriver)\" --headless",
-    "test:gecko": "wasm-pack test --firefox --geckodriver \"$(which geckodriver)\" --headless"
+    "test:chrome": "wasm-pack -vvv test --chrome --chromedriver \"$(which chromedriver)\"",
+    "test:firefox": "wasm-pack test --firefox --geckodriver \"$(which geckodriver)\" --headless"
   },
   "keywords": [],
   "author": "",

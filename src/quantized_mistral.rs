@@ -31,8 +31,11 @@ impl Model {
 
         const REPEAT_LAST_N: usize = 64;
         let dev = Device::Cpu;
+
         let input = Tensor::new(tokens, &dev)?.unsqueeze(0)?;
+        debug!("Starting forward pass...");
         let logits = self.inner.forward(&input, tokens.len())?;
+        debug!("Forward pass done.");
         let logits = logits.squeeze(0)?;
         let logits = if self.repeat_penalty == 1. || tokens.is_empty() {
             logits
