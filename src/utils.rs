@@ -3,7 +3,7 @@ use js_sys::{ArrayBuffer, Uint8Array};
 
 use wasm_bindgen::{prelude::*, JsValue};
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{Request, RequestInit, RequestMode, Response};
+use web_sys::{Navigator, Request, RequestInit, RequestMode, Response, Window};
 
 pub fn set_panic_hook() {
     // When the `console_error_panic_hook` feature is enabled, we can call the
@@ -47,4 +47,21 @@ pub async fn load_binary(url: &str) -> Result<Vec<u8>, JsValue> {
     let x = js_sys::Uint8Array::from(bla.as_slice());
     log!(url, x);
     Ok(vec)
+}
+
+#[cfg(web_sys_unstable_apis)]
+pub async fn has_gpu() -> bool {
+    let window = web_sys::window().expect("no global `window` exists");
+    let navigator = window.navigator();
+
+    let gpu: web_sys::Gpu = navigator.gpu();
+    let has_gpu_check = JsFuture::from(gpu.request_adapter()).await;
+
+    let mut has_gpu = false;
+    match has_gpu_check {
+        Ok(_) => has_gpu = true,
+        Err(err) => {}
+    }
+    log!("wgsl_language_features");
+    has_gpu
 }

@@ -11,6 +11,9 @@ repository = "https://github.com/text-yoga/transformers-wasm"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
+[build]
+rustflags = ["--cfg=web_sys_unstable_apis"]
+
 [features]
 default = ["console_error_panic_hook"]
 
@@ -45,7 +48,11 @@ features = [
   'RequestMode',
   'Response',
   'Window',
+  'Navigator',
+  'Gpu',
+  'WgslLanguageFeatures'
 ]
+
 version = "0.3.64"
 
 [dev-dependencies]

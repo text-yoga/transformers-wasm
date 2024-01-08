@@ -13,13 +13,15 @@ use transformers_wasm::utils;
 use wasm_bindgen::{prelude::*, JsValue};
 use wasm_bindgen_futures::JsFuture;
 use wasm_bindgen_test::*;
-use web_sys::console;
-use web_sys::{Request, RequestInit, RequestMode, Response};
+use web_sys::{console, Request, RequestInit, RequestMode, Response};
 
 wasm_bindgen_test_configure!(run_in_browser);
 
 #[wasm_bindgen_test]
 async fn pass() -> Result<(), JsValue> {
+    #[cfg(web_sys_unstable_apis)]
+    log!(utils::has_gpu().await);
+
     let tokenizer_url = "http://localhost:31300/TinyLlama_TinyLlama-1.1B-Chat-v1.0/tokenizer.json";
     let model_url = "http://localhost:31300/TheBloke_TinyLlama-1.1B-Chat-v1.0-GGUF/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf";
 
