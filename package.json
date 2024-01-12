@@ -7,11 +7,11 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "wasm-pack build -s text-yoga --dev",
-    "build:release": "wasm-pack build -s text-yoga --release",
+    "build": "wasm-pack build -s text-yoga --dev --target web",
+    "build:release": "wasm-pack build -s text-yoga --release --target web",
     "test:server": "npx http-server --cors -p 31300  ./tests/data",
     "test:chrome": "wasm-pack -vvv test --chrome --chromedriver \"$(which chromedriver)\"",
-    "test:firefox": "wasm-pack test --firefox --geckodriver \"$(which geckodriver)\" --headless"
+    "test:firefox": "wasm-pack test --firefox --geckodriver \"$(which geckodriver)\""
   },
   "keywords": [],
   "author": "",

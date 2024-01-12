@@ -1,4 +1,4 @@
-pub mod quantized_mistral;
+pub mod quantized_llama;
 pub mod utils;
 use wasm_bindgen::prelude::*;
 

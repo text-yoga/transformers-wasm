@@ -33,8 +33,10 @@ impl Model {
         let dev = Device::Cpu;
 
         let input = Tensor::new(tokens, &dev)?.unsqueeze(0)?;
-        debug!("Starting forward pass...");
-        let logits = self.inner.forward(&input, tokens.len())?;
+        debug!(format!("#tokens: {:}", &tokens.len()));
+        debug!("Starting forward pass... ");
+        // let logits = self.inner.forward(&input, tokens.len())?;
+        let logits = self.inner.forward(&input, 0)?;
         debug!("Forward pass done.");
         let logits = logits.squeeze(0)?;
         let logits = if self.repeat_penalty == 1. || tokens.is_empty() {
@@ -51,14 +53,14 @@ impl Model {
         let next_token_id = self.logits_processor.sample(&logits)?;
 
         let js: JsValue = next_token_id.into();
-        console::log_2(&"Generated token id: ".into(), &js);
+        debug!("Generated token id: ", &js);
 
         self.tokens.push(next_token_id);
 
         let next_token = self.tokenizer.id_to_token(next_token_id);
 
         let js: JsValue = next_token.clone().into();
-        console::log_2(&"Generated token: ".into(), &js);
+        debug!("Generated token: ", &js);
 
         let text = match next_token {
             Some(text) => text.replace('▁', " ").replace("<0x0A>", "\n"),
@@ -76,7 +78,7 @@ impl Model {
         let seed = 299792458;
         let temperature: Option<f64> = Some(0.8);
         let top_p: Option<f64> = None;
-        let repeat_penalty: f32 = 1.;
+        let repeat_penalty: f32 = 1.1;
         let start = time::Instant::now();
         let mut cursor = Cursor::new(&weights);
         let mut cursor2 = Cursor::new(&weights);
