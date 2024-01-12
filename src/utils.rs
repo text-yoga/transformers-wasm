@@ -1,5 +1,5 @@
 use gloo::console::log;
-use js_sys::{ArrayBuffer, Uint8Array};
+use js_sys::{ArrayBuffer, Uint8Array, JSON};
 
 use wasm_bindgen::{prelude::*, JsValue};
 use wasm_bindgen_futures::JsFuture;
@@ -16,15 +16,30 @@ pub fn set_panic_hook() {
     console_error_panic_hook::set_once();
 }
 
-async fn fetch(url: &str) -> Result<Response, JsValue> {
+fn to_error(value: JsValue) -> JsError {
+    JsError::new(
+        JSON::stringify(&value)
+            .map(|js_string| {
+                js_string
+                    .as_string()
+                    .unwrap_or(String::from("An unknown error occurred."))
+            })
+            .unwrap_or(String::from("An unknown error occurred."))
+            .as_str(),
+    )
+}
+
+async fn fetch(url: &str) -> Result<Response, JsError> {
     let mut opts = RequestInit::new();
     opts.method("GET");
     opts.mode(RequestMode::Cors);
 
-    let request = Request::new_with_str_and_init(&url, &opts)?;
+    let request = Request::new_with_str_and_init(&url, &opts).map_err(to_error)?;
 
     let window = web_sys::window().unwrap();
-    let resp_value = JsFuture::from(window.fetch_with_request(&request)).await?;
+    let resp_value = JsFuture::from(window.fetch_with_request(&request))
+        .await
+        .map_err(to_error)?;
 
     assert!(resp_value.is_instance_of::<Response>());
     let resp: Response = resp_value.dyn_into().unwrap();
@@ -32,15 +47,23 @@ async fn fetch(url: &str) -> Result<Response, JsValue> {
     Ok(resp)
 }
 
-pub async fn load_json(url: &str) -> Result<JsValue, JsValue> {
+pub async fn load_json(url: &str) -> Result<JsValue, JsError> {
     let response = fetch(url).await?;
-    let json = JsFuture::from(response.json()?).await?;
+    let json = JsFuture::from(
+        response
+            .json()
+            .map_err(|err| JsError::new("Failed to parse json"))?,
+    )
+    .await
+    .map_err(to_error)?;
     Ok(json)
 }
 
-pub async fn load_binary(url: &str) -> Result<Vec<u8>, JsValue> {
+pub async fn load_binary(url: &str) -> Result<Vec<u8>, JsError> {
     let response = fetch(url).await?;
-    let ab = JsFuture::from(response.array_buffer()?).await?;
+    let ab = JsFuture::from(response.array_buffer().map_err(to_error)?)
+        .await
+        .map_err(to_error)?;
 
     let vec = Uint8Array::new(&ab).to_vec();
     let bla = (&vec.iter().take(10).map(|x| x.clone()).collect::<Vec<u8>>()).clone();

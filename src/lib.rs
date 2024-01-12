@@ -1,4 +1,5 @@
-pub mod quantized_llama;
+pub mod quantized_llama2;
+pub mod token_output_stream;
 pub mod utils;
 use wasm_bindgen::prelude::*;
 
